@@ -68,17 +68,9 @@ const SideDrawer = () => {
     history.push("/");
   };
 
-  const handleSearch = async () => {
-    if (!search) {
-      toast({
-        title: "Please enter something in search",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
-      return;
-    }
+  // new handleSearch
+  const handleSearch = async (query) => {
+    if (!query) return; // skip if empty
 
     try {
       setLoading(true);
@@ -89,7 +81,7 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      const { data } = await axios.get(`/api/user?search=${query}`, config);
 
       setLoading(false);
       setSearchResult(data);
@@ -212,9 +204,14 @@ const SideDrawer = () => {
                 placeholder="Search by name or email"
                 mr={2}
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSearch(value); // update state
+                  handleSearch(value); // call your function with new value
+                }}
+
               />
-              <Button onClick={handleSearch}>Go</Button>
+              // <Button onClick={handleSearch}>Go</Button>
             </Box>
             {loading ? (
               <ChatLoading />
