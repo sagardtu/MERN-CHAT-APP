@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 
 import { ChatState } from "../../Context/ChatProvider";
@@ -10,7 +10,7 @@ import ChatLoading from "./ChatLoading";
 
 import GroupChatModal from "./GroupChatModal";
 
-import { getSender } from "../../config/ChatLogic";
+import { getSender, getSenderFull } from "../../config/ChatLogic";
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -19,7 +19,7 @@ const MyChats = ({ fetchAgain }) => {
   const toast = useToast();
 
   const fetchChats = async () => {
-    // console.log(user._id)
+    
     try {
       const config = {
         headers: {
@@ -93,20 +93,69 @@ const MyChats = ({ fetchAgain }) => {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
+                display="flex"
                 onClick={() => setSelectedChat(chat)}
+                alignItems="center"
                 cursor="pointer"
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}
                 px={3}
-                py={2}
+                py={3}
                 borderRadius="lg"
                 key={chat._id}
               >
-                <Text>
-                  {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
-                    : chat.chatName}
-                </Text>
+                {!chat.isGroupChat ? (
+                  <Avatar
+                    mr={2}
+                    size="md"
+                    cursor="pointer"
+                    name={getSender(loggedUser, chat.users)}
+                    src={
+                      getSenderFull(loggedUser, chat.users).pic !==
+                      "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+                        ? getSenderFull(loggedUser, chat.users).pic
+                        : ""
+                    }
+                  />
+                ) : (
+                  <Avatar
+                    mr={2}
+                    size="md"
+                    cursor="pointer"
+                    name={chat.chatName}
+                  />
+                )}
+
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                  height="100%"
+                  ml={2}
+                >
+                  <Box>
+                    <Text>
+                      {!chat.isGroupChat
+                        ? getSender(loggedUser, chat.users)
+                        : chat.chatName}
+                    </Text>
+
+                    <Text fontSize="xs" display="flex" overflowX="hidden">
+                      {chat.latestMessage ? (
+                        <>
+                          <Text as="b">
+                            {chat.latestMessage.sender._id === loggedUser._id
+                              ? "You"
+                              : chat.latestMessage.sender.name}
+                          </Text>
+                          <Text>{`: ${chat.latestMessage.content}`}</Text>
+                        </>
+                      ) : (
+                        "Click on user to start chatting"
+                      )}
+                    </Text>
+                  </Box>
+                </Box>
               </Box>
             ))}
           </Stack>
