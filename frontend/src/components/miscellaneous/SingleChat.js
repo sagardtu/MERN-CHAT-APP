@@ -25,7 +25,13 @@ import "../miscellaneous/styles.css";
 
 // setting up socket.io for client...
 import io from "socket.io-client";
-const ENDPOINT = "http://localhost:5000";
+// const ENDPOINT = "http://localhost:5000";
+
+const ENDPOINT =
+  process.env.NODE_ENV === "production"
+    ? "https://your-backend.onrender.com"
+    : "http://localhost:5000";
+
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
