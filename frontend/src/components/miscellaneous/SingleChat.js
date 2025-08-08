@@ -29,7 +29,7 @@ import io from "socket.io-client";
 
 const ENDPOINT =
   process.env.NODE_ENV === "production"
-    ? "https://your-backend.onrender.com"
+    ? "https://wetalk-hnu3.onrender.com"
     : "http://localhost:5000";
 
 var socket, selectedChatCompare;
