@@ -25,7 +25,7 @@ import "../miscellaneous/styles.css";
 
 // setting up socket.io for client...
 import io from "socket.io-client";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://wetalk-hnu3.onrender.com/";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
