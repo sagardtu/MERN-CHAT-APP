@@ -58,7 +58,12 @@ const server = app.listen(
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "*",
+    origin: [
+      "http://localhost:3000", // local frontend
+      "https://wetalk-hnu3.onrender.com" // deployed frontend
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
   },
 });
 
