@@ -20,7 +20,7 @@ const Signup = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmpassword, setConfirmpassword] = useState();
-  const [pics, setPic] = useState();
+  const [pic, setPic] = useState();
 
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -66,7 +66,7 @@ const Signup = () => {
           name,
           email,
           password,
-          pics,
+          pic,
         },
         config
       );
@@ -96,9 +96,9 @@ const Signup = () => {
     }
   };
 
-  const postDetails = (pics) => {
+  const postDetails = (pic) => {
     setLoading(true);
-    if (pics === undefined) {
+    if (pic === undefined) {
       toast({
         title: "Please Select an Image",
         status: "warning",
@@ -109,11 +109,10 @@ const Signup = () => {
       return;
     }
 
-    console.log(pics);
 
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+    if (pic.type === "image/jpeg" || pic.type === "image/png") {
       const data = new FormData();
-      data.append("file", pics);
+      data.append("file", pic);
       data.append("upload_preset", "wetalk");
       data.append("cloud_name", "sagar-deployer");
       fetch("https://api.cloudinary.com/v1_1/sagar-deployer/image/upload", {
@@ -123,7 +122,6 @@ const Signup = () => {
         .then((res) => res.json())
         .then((data) => {
           setPic(data.url.toString());
-          console.log(data.url.toString());
           setLoading(false);
         })
         .catch((err) => {
